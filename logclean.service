@@ -1,0 +1,12 @@
+[Unit]
+Description=Cleanup logs & temp files at shutdown
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'find /var/log -type f -name "*.log" -exec truncate -s 0 {} \; || true && rm -rf /tmp/* /var/tmp/* || true'
+TimeoutSec=0
+
+[Install]
+WantedBy=halt.target reboot.target shutdown.target
